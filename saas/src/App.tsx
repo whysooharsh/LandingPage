@@ -1,54 +1,64 @@
-import { ChevronDown} from 'lucide-react';
-import { useRef} from "react";
+import { ChevronDown } from 'lucide-react';
+import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
 export default function App() {
- 
+
+  const [scrolled, setscrolled] = useState(false);
   const scroll = useRef(null);
 
-  const { scrollYProgress} = useScroll({
-    target : scroll,
-    offset : ["start start", "end start"]
-});
+  const { scrollYProgress } = useScroll({
+    target: scroll,
+    offset: ["start start", "end start"]
+  });
 
-  const scale = useTransform(scrollYProgress, [0,1],[1,0.7]);
-  const y = useTransform(scrollYProgress, [0,1], [0,100]);
-  const x = useTransform(scrollYProgress, [0,1], ["0%", "30%"]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.7]);
+  const y = useTransform(scrollYProgress, [0, 1], [0, 100]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setscrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#efb1ae] via-[#FED5C7] to-[#FFE4C6] overflow-hidden relative  ">
       {/* navbar */}
-       
 
-      <nav className="relative z-50 sticky">
-        <div className='max-w-7xl mx-auto px-6'>
-          <div className='flex justify-between items-center h-20 '>
+
+      <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-100 ${scrolled ? "bg-white/30 backdrop-blur-md shadow-md" : "bg-transparent"}`}>
+        <div className='max-w-7xl mx-auto px-4'>
+          <div className='flex justify-between items-center h-16 '>
             <div className='flex items-center space-x-2'>
-              <img className='max-h-8 max-w-10' src='https://logowik.com/content/uploads/images/hume-ai1720994953.logowik.com.webp' alt=' '>
+              <img className='max-h-6 max-w-10' src='https://logowik.com/content/uploads/images/hume-ai1720994953.logowik.com.webp' alt=' '>
               </img>
-              <span className="text-2xl font-mono font-sm text-black">bruh.</span>
+              <span className="text-base font-mono font-sm text-black">bruh.</span>
             </div>
             <div className='hidden md:flex items-center space-x-6 '>
 
               <div className="relative group">
-                <button className="flex items-center text-gray-600 hover:text-black transition-colors font-sans text-sm uppercase">
+                <button className="flex items-center text-gray-600 hover:text-black transition-colors font-sans text-xs uppercase">
                   PRODUCTS
                   <ChevronDown className="ml-1 w-4 h-4 transition-transform group-hover:rotate-180" />
                 </button>
               </div>
 
               <div className="relative group">
-                <button className="flex items-center text-gray-600 hover:text-black transition-colors font-sans text-sm uppercase">
+                <button className="flex items-center text-gray-600 hover:text-black transition-colors font-sans text-xs uppercase">
                   DEVELOPERS
                   <ChevronDown className="ml-1 w-4 h-4 transition-transform group-hover:rotate-180" />
                 </button>
               </div>
 
-              <a href="#" className="text-gray-600 hover:text-black transition-colors font-sans text-sm uppercase">
+              <a href="#" className="text-gray-600 hover:text-black transition-colors font-sans text-xs  uppercase">
                 PRICING
               </a>
 
               <div className="relative group">
-                <button className="flex items-center text-gray-600 hover:text-black transition-colors font-sans text-sm uppercase">
+                <button className="flex items-center text-gray-600 hover:text-black transition-colors font-sans text-xs uppercase">
                   RESOURCES
                   <ChevronDown className="ml-1 w-4 h-4 transition-transform group-hover:rotate-180" />
                 </button>
@@ -56,7 +66,7 @@ export default function App() {
             </div>
 
             <div className="hideen md:flex items-center">
-              <button className="bg-black text-white px-3 py-1 py-auto rounded-full font-sans text-sm uppercase hover:bg-gray-800 transition-colors">
+              <button className="bg-black text-white px-2 py-1 rounded-full font-sans text-xs uppercase hover:bg-gray-800 transition-colors">
                 GO TO APP
               </button>
             </div>
@@ -80,32 +90,24 @@ export default function App() {
 
         <motion.div style={{ scale, y }} ref={scroll} className='bg-white/80 backdrop-blur-md p-6 rounded-2xl shadow-lg'>
           <div className='mb-2'>
-            </div>
-            <div className='relative w-full pb-[56%] h-0 overflow-hidden rounded-xl max-w-6xl'>
-              <iframe className='absolute top-0 left-0 w-full h-full' src=' https://www.youtube.com/embed/2K2R8dmFhZY?controls=0&modestbranding=1&rel=0&showinfo=0'  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen>
-              </iframe>
-            </div>
+          </div>
+          <div className='relative w-full pb-[56%] h-0 overflow-hidden rounded-xl max-w-6xl'>
+            <iframe className='absolute top-0 left-0 w-full h-full' src=' https://www.youtube.com/embed/2K2R8dmFhZY?controls=0&modestbranding=1&rel=0&showinfo=0' allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen>
+            </iframe>
+          </div>
 
-            {/* <div className='mb-4'>
-              <div className="flex gap-4">
-                <button className="flex items-baseline px-6 py-3 bg-gray-100 text-gray-700 rounded-full font-sans text-sm hover:bg-gray-200 transition-colors">
-                  <Dice6 className="w-4 h-4 mr-2" />
-                  RANDOMIZE
-                </button>
-                <button className="flex-1 bg-black max-w-28 text-white py-3 px-4 rounded-full font-sans text-sm uppercase hover:bg-gray-800 transition-colors">
-                  GENERATE
-                </button>
-              </div>
-            </div> */}
-          
+
 
         </motion.div>
 
+        <div className="text-center mt-10 animate-bounce text-gray-600 font-mono">
+          ↓ Scroll to explore
+        </div>
 
       </div>
 
-              
+      <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-[#FFE4C6] to-transparent pointer-events-none z-20" />
+
     </div>
   )
 };
- 
