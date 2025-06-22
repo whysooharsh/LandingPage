@@ -1,10 +1,16 @@
 import { ChevronDown } from 'lucide-react';
 import { useRef, useState, useEffect } from "react";
-import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
-export default function App() {
+import { motion, useScroll, useTransform, AnimatePresence} from "framer-motion";
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
+
+
+export default function App() {
+  const [isOpen, setisOpen] = useState(false);
   const [scrolled, setscrolled] = useState(false);
   const scroll = useRef(null);
+
+  const toggleMenu = () => setisOpen(!isOpen);
 
   const { scrollYProgress } = useScroll({
     target: scroll,
@@ -24,19 +30,25 @@ export default function App() {
   }, []);
 
 
+
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#efb1ae] via-[#FED5C7] to-[#FFE4C6] overflow-hidden relative  ">
       {/* navbar */}
 
 
-      <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-100 ${scrolled ? "bg-white/30 backdrop-blur-md shadow-md" : "bg-transparent"}`}>
+      <nav className={`fixed top-0 left-0 w-full z-40 transition-all duration-100 ${scrolled ? "bg-white/30 backdrop-blur-md shadow-md" : "bg-transparent"}`}>
         <div className='max-w-7xl mx-auto px-4'>
           <div className='flex justify-between items-center h-16 '>
-            <div className='flex items-center space-x-2'>
+
+            <div className='flex items-center space-x-2 '>
               <img className='max-h-6 max-w-10' src='https://logowik.com/content/uploads/images/hume-ai1720994953.logowik.com.webp' alt=' '>
               </img>
               <span className="text-base font-mono font-sm text-black">bruh.</span>
             </div>
+
+            {/* Desktop Menu */}
+
             <div className='hidden md:flex items-center space-x-6 '>
 
               <div className="relative group">
@@ -65,14 +77,71 @@ export default function App() {
               </div>
             </div>
 
-            <div className="hideen md:flex items-center">
+            {/* desktop btn bruuh  */}
+            <div className="hidden md:flex items-center">
               <button className="bg-black text-white px-2 py-1 rounded-full font-sans text-xs uppercase hover:bg-gray-800 transition-colors">
                 GO TO APP
               </button>
-            </div>
-          </div>
-        </div>
 
+
+            </div>
+
+            {/* mobile btn */}
+            <div className="md:hidden flex items-center">
+              <button onClick={toggleMenu} aria-label="Toggle Menu">
+                <Bars3Icon className='h-6 w-6 text-gray-800' />
+
+              </button>
+            </div>
+
+          </div>
+
+          {isOpen && (
+            <div className="md:hidden fixed inset-0 backdrop-blur-2xl bg-white/90 z-50 flex flex-col transition-opacity duration 300 ease-in-out animate-fade-in">
+              <div className="flex justify-between items-center p-6 border-b border-gray-200">
+                <div className='flex items-center space-x-2'>
+                  <img className='max-h-6 max-w-10' src='https://logowik.com/content/uploads/images/hume-ai1720994953.logowik.com.webp' alt=' '>
+                  </img>
+                   <span className="text-base font-mono font-sm text-black">bruh.</span>
+                   </div>
+                <button onClick={toggleMenu} aria-label="Close Menu">
+                  <XMarkIcon className="h-6 w-6 text-gray-800" />
+                </button>
+              </div>
+
+              {/* Mobile links/menu items */}
+              <div className='flex-1 px-6 py-8'>
+                <div className='space-y-6'>
+                  <div className='flex items-center justify-between py-4 border-b border-gray-100'>
+                    <span className='text-gray-800 font-mono text-sm uppercase tracking-wider'>PRODUCT</span> 
+                    <ChevronDown className="w-4 h-4 text-gray-600" />
+                  </div>
+                  <div className="flex items-center justify-between py-4 border-b border-gray-100">
+                    <span className="text-gray-800 font-mono text-sm uppercase tracking-wider">DEVELOPERS</span>
+                    <ChevronDown className="w-4 h-4 text-gray-600" />
+                  </div>
+                  <div className="py-4 border-b border-gray-100">
+                    <span className="text-gray-800 font-mono text-sm uppercase tracking-wider">PRICING</span>
+                  </div>
+                  <div className="flex items-center justify-between py-4 border-b border-gray-100">
+                    <span className="text-gray-800 font-mono text-sm uppercase tracking-wider">RESOURCES</span>
+                    <ChevronDown className="w-4 h-4 text-gray-600" />
+                  </div>
+                  </div>
+                </div>
+             <div className="p-6 border-t border-gray-200">
+                <button className="w-full bg-black text-white py-4 rounded-full font-mono text-sm uppercase tracking-wider hover:bg-gray-800 transition-colors">
+                  GO TO APP
+                </button>
+              </div>
+        
+
+             
+            </div>
+          )}
+
+
+        </div>
       </nav>
 
 
