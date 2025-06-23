@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import hume from "../lib/humeClient";
 
 export default function Playground() {
@@ -8,36 +8,46 @@ export default function Playground() {
   const [loading, setLoading] = useState(false);
 
   const synthesizeSpeech = async () => {
-  setLoading(true);
-  setAudioUrl(null);
+    setLoading(true);
+    setAudioUrl(null);
 
-  try {
-    const response = await hume.tts.synthesizeJson({
-      body: {
-        utterances: [
-          {
-            text,
-            ...(description ? { description } : {})
-          }
-        ],
-        format: {
-          type: "mp3"
-        },
-        numGenerations: 1
-      }
-    });
+    try {
+      const response = await hume.tts.synthesizeJson({
+        body: {
+          utterances: [
+            {
+              text,
+              ...(description ? { description } : {})
+            }
+          ],
+          format: {
+            type: "mp3"
+          },
+          numGenerations: 1
+        }
+      });
 
-    const base64 = response.generations[0].audio;
-    const url = `data:audio/mp3;base64,${base64}`;
-    setAudioUrl(url);
-  } catch (err) {
-    console.error("TTS error:", err);
-    alert("Could not generate voice. See console.");
-  } finally {
-    setLoading(false);
-  }
-};
+      const base64 = response.generations[0].audio;
+      const url = `data:audio/mp3;base64,${base64}`;
+      setAudioUrl(url);
+    } catch (err) {
+      console.error("TTS error:", err);
+      alert("Could not generate voice. See console.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
+    // Only revoke if audioUrl is an object URL
+    if (audioUrl && audioUrl.startsWith('blob:')) {
+      return () => {
+        URL.revokeObjectURL(audioUrl);
+      };
+    }
+    // No cleanup needed for data URLs
+    return undefined;
+  }, [audioUrl]);
 
   return (
     <div className="max-w-xl mx-auto px-4 py-16 font-mono pt-24">
@@ -68,7 +78,12 @@ export default function Playground() {
 
       {audioUrl && (
         <div className="mt-6">
-          <audio controls src={audioUrl} />
+          <audio
+            controls
+            src={audioUrl}
+            aria-label="Generated audio playback"
+            controlsList="nodownload noplaybackrate"
+          />
         </div>
       )}
     </div>
