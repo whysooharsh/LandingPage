@@ -25,10 +25,9 @@ export default function Navbar() {
         document.body.classList.remove("overflow-hidden");
     }
     return ()=>{
-        document.body.classList.remove("overfloiw-hidden");
+        document.body.classList.remove("overflow-hidden");
     };
   },[isOpen]);
-
 
   return (
       <nav className={`fixed top-0 left-0 w-full z-40 transition-all duration-100 ${scrolled ? "bg-white/30 backdrop-blur-md shadow-md" : "bg-transparent"}`}>
