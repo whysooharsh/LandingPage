@@ -3,7 +3,7 @@ import { ChevronDown } from 'lucide-react';
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-
+import { Link } from 'react-router-dom';
 export default function Navbar() {
   const [isOpen, setisOpen] = useState(false);
   const [scrolled, setscrolled] = useState(false);
@@ -30,7 +30,7 @@ export default function Navbar() {
   },[isOpen]);
 
   return (
-      <nav className={`fixed top-0 left-0 w-full z-40 transition-all duration-100 ${scrolled ? "bg-white/30 backdrop-blur-md shadow-md" : "bg-transparent"}`}>
+      <nav className={`fixed top-0 left-0 w-full z-40 transition-all duration-100 ${scrolled ? "backdrop-blur-2xl bg-white/90 shadow-md" : "bg-transparent"}`}>
         <div className='max-w-7xl mx-auto px-4'>
           <div className='flex justify-between items-center h-16 '>
 
@@ -71,13 +71,13 @@ export default function Navbar() {
             </div>
 
             {/* desktop btn bruuh  */}
+            <Link to = "/playground">
             <div className="hidden md:flex items-center">
               <button className="bg-black text-white px-2 py-1 rounded-full font-sans text-xs uppercase hover:bg-gray-800 transition-colors">
                 GO TO APP
               </button>
-
-
             </div>
+            </Link>
 
             {/* mobile btn */}
             <div className="md:hidden flex items-center">
